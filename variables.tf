@@ -349,7 +349,7 @@ variable "volume_tags" {
 variable "enable_volume_tags" {
   description = "Whether to enable volume tags (if enabled it conflicts with root_block_device tags)"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "vpc_security_group_ids" {
@@ -462,7 +462,7 @@ variable "iam_role_name" {
 variable "iam_role_use_name_prefix" {
   description = "Determines whether the IAM role name (`iam_role_name` or `name`) is used as a prefix"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "iam_role_path" {
@@ -502,7 +502,7 @@ variable "iam_role_tags" {
 variable "create_security_group" {
   description = "Determines whether a security group will be created"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "security_group_name" {
@@ -514,7 +514,7 @@ variable "security_group_name" {
 variable "security_group_use_name_prefix" {
   description = "Determines whether the security group name (`security_group_name` or `name`) is used as a prefix"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "security_group_description" {
@@ -598,10 +598,4 @@ variable "eip_tags" {
   description = "A map of additional tags to add to the eip"
   type        = map(string)
   default     = {}
-}
-
-variable "putin_khuylo" {
-  description = "Do you agree that Putin doesn't respect Ukrainian sovereignty and territorial integrity? More info: https://en.wikipedia.org/wiki/Putin_khuylo!"
-  type        = bool
-  default     = true
 }
