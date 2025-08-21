@@ -31,7 +31,6 @@ locals {
 data "aws_ssm_parameter" "this" {
   count = local.create && var.ami == null ? 1 : 0
 
-  region = var.region
 
   name = var.ami_ssm_parameter
 }
@@ -43,7 +42,7 @@ data "aws_ssm_parameter" "this" {
 resource "aws_instance" "this" {
   count = local.create && !var.ignore_ami_changes && !var.create_spot_instance ? 1 : 0
 
-  region = var.region
+ 
 
   ami                         = local.ami
   associate_public_ip_address = var.associate_public_ip_address
@@ -233,7 +232,7 @@ resource "aws_instance" "this" {
 resource "aws_instance" "ignore_ami" {
   count = local.create && var.ignore_ami_changes && !var.create_spot_instance ? 1 : 0
 
-  region = var.region
+ 
 
   ami                         = local.ami
   associate_public_ip_address = var.associate_public_ip_address
@@ -429,7 +428,7 @@ resource "aws_instance" "ignore_ami" {
 resource "aws_spot_instance_request" "this" {
   count = local.create && var.create_spot_instance ? 1 : 0
 
-  region = var.region
+ 
 
   # Spot request specific attributes
   instance_interruption_behavior = var.spot_instance_interruption_behavior
@@ -623,7 +622,7 @@ resource "aws_ec2_tag" "spot_instance" {
 resource "aws_ebs_volume" "this" {
   for_each = var.create && var.ebs_volumes != null ? var.ebs_volumes : {}
 
-  region = var.region
+ 
 
   availability_zone    = local.instance_availability_zone
   encrypted            = each.value.encrypted
@@ -649,7 +648,7 @@ resource "aws_ebs_volume" "this" {
 resource "aws_volume_attachment" "this" {
   for_each = var.create && var.ebs_volumes != null ? var.ebs_volumes : {}
 
-  region = var.region
+ 
 
   device_name                    = coalesce(each.value.device_name, each.key)
   instance_id                    = local.instance_id
@@ -733,7 +732,7 @@ locals {
 data "aws_subnet" "this" {
   count = local.create_security_group ? 1 : 0
 
-  region = var.region
+ 
 
   id = var.subnet_id
 }
@@ -741,7 +740,7 @@ data "aws_subnet" "this" {
 resource "aws_security_group" "this" {
   count = local.create_security_group ? 1 : 0
 
-  region = var.region
+ 
 
   name        = var.security_group_use_name_prefix ? null : local.security_group_name
   name_prefix = var.security_group_use_name_prefix ? "${local.security_group_name}-" : null
@@ -762,7 +761,7 @@ resource "aws_security_group" "this" {
 resource "aws_vpc_security_group_egress_rule" "this" {
   for_each = local.create_security_group && var.security_group_egress_rules != null ? var.security_group_egress_rules : {}
 
-  region = var.region
+ 
 
   cidr_ipv4                    = each.value.cidr_ipv4
   cidr_ipv6                    = each.value.cidr_ipv6
@@ -786,7 +785,7 @@ resource "aws_vpc_security_group_egress_rule" "this" {
 resource "aws_vpc_security_group_ingress_rule" "this" {
   for_each = local.create_security_group && var.security_group_ingress_rules != null ? var.security_group_ingress_rules : {}
 
-  region = var.region
+ 
 
   cidr_ipv4                    = each.value.cidr_ipv4
   cidr_ipv6                    = each.value.cidr_ipv6
@@ -814,7 +813,7 @@ resource "aws_vpc_security_group_ingress_rule" "this" {
 resource "aws_eip" "this" {
   count = local.create && var.create_eip && !var.create_spot_instance ? 1 : 0
 
-  region = var.region
+ 
 
   domain   = var.eip_domain
   instance = local.instance_id
